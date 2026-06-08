@@ -1,0 +1,2 @@
+-- Schema is managed by SQLAlchemy on startup; this file seeds reference data.
+-- Tables are created by the application (app/database.py).

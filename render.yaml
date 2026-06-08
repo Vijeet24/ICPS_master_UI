@@ -1,0 +1,17 @@
+# Render Blueprint — deploy from GitHub: https://render.com/docs/blueprint-spec
+# 1. Create a free PostgreSQL database at https://neon.tech (copy connection string)
+# 2. In Render Dashboard → New → Blueprint → connect this repo
+# 3. Set DATABASE_URL when prompted (use Neon connection string with ?sslmode=require)
+
+services:
+  - type: web
+    name: icps-master-ui
+    runtime: docker
+    plan: free
+    region: oregon
+    healthCheckPath: /api/brands
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: PYTHON_VERSION
+        value: "3.10.11"
