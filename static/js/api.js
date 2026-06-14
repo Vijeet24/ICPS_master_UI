@@ -55,4 +55,15 @@ export const api = {
   updateSubcategory: (id, payload) =>
     apiRequest(`/api/subcategories/${id}`, { method: "PUT", body: JSON.stringify(payload) }),
   deleteSubcategory: (id) => apiRequest(`/api/subcategories/${id}`, { method: "DELETE" }),
+
+  getOrders: () => apiRequest("/api/orders"),
+  getOrder: (id) => apiRequest(`/api/orders/${id}`),
+  getOrderAudit: (id) => apiRequest(`/api/orders/${id}/audit`),
+  getMessageAudit: (limit = 100) => apiRequest(`/api/orders/audit?limit=${limit}`),
+  getWorkflowStats: () => apiRequest("/api/orders/stats"),
+  getMqttStatus: () => apiRequest("/api/orders/mqtt-status"),
+  getSamplePurchaseOrder: () => apiRequest("/api/orders/sample/purchase-order"),
+  simulatePurchaseOrder: (payload) =>
+    apiRequest("/api/orders/simulate", { method: "POST", body: JSON.stringify({ payload }) }),
+  forceShipOrder: (id) => apiRequest(`/api/orders/${id}/ship`, { method: "POST" }),
 };

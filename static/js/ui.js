@@ -43,6 +43,17 @@ export function formatPrice(value, currency) {
   return `${Number(value).toFixed(2)} ${currency || ""}`.trim();
 }
 
+export function formatDateTime(value) {
+  if (!value) {
+    return "—";
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return String(value);
+  }
+  return date.toLocaleString();
+}
+
 export function setFieldError(form, fieldName, message) {
   const input = form.querySelector(`[name="${fieldName}"]`);
   const errorEl = form.querySelector(`[data-error-for="${fieldName}"]`);

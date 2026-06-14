@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ICPS Master UI — Product Management</title>
+    <title>ICPS Master UI — Product & Seller Workflow</title>
     <link rel="stylesheet" href="/static/css/styles.css" />
   </head>
   <body>
     <header>
-      <h1>ICPS Master UI</h1>
-      <p>Manage products, brands, and categories connected to PostgreSQL</p>
+      <h1>I-CPS Warehouse UI</h1>
+      <p>Manage products, brands, categories, and the seller workflow</p>
     </header>
 
     <main class="layout">
@@ -17,8 +17,73 @@
         <button class="tab-btn active" data-tab="products">Products</button>
         <button class="tab-btn" data-tab="brands">Brands</button>
         <button class="tab-btn" data-tab="categories">Categories</button>
+        <button class="tab-btn" data-tab="orders">Seller Workflow</button>
         <button class="btn btn-secondary" id="refresh-btn">Refresh</button>
       </div>
+
+      <section id="orders-panel" class="panel">
+        <div class="panel-header">
+          <h2>Seller Workflow</h2>
+          <div class="actions">
+            <label class="auto-refresh-toggle">
+              <input type="checkbox" id="orders-auto-refresh" checked />
+              Auto-refresh
+            </label>
+            <button class="btn btn-secondary" id="simulate-po-btn">Simulate PO (850)</button>
+          </div>
+        </div>
+
+        <div class="workflow-summary" id="workflow-summary">
+          <div class="stat-card"><span class="stat-value" id="stat-total">0</span><span class="stat-label">Total orders</span></div>
+          <div class="stat-card"><span class="stat-value" id="stat-received">0</span><span class="stat-label">Received</span></div>
+          <div class="stat-card"><span class="stat-value" id="stat-acknowledged">0</span><span class="stat-label">Acknowledged</span></div>
+          <div class="stat-card"><span class="stat-value" id="stat-ready">0</span><span class="stat-label">Ready to ship</span></div>
+          <div class="stat-card"><span class="stat-value" id="stat-shipped">0</span><span class="stat-label">Shipped</span></div>
+        </div>
+
+        <div class="mqtt-status-bar" id="mqtt-status-bar">
+          <span class="mqtt-indicator" id="mqtt-indicator"></span>
+          <span id="mqtt-status-text">Checking MQTT status…</span>
+        </div>
+
+        <div class="split-layout workflow-split">
+          <div class="subpanel">
+            <h3>Purchase Orders</h3>
+            <div class="table-wrap">
+              <table id="orders-table">
+                <thead>
+                  <tr>
+                    <th>PO Number</th>
+                    <th>Buyer GLN</th>
+                    <th>Status</th>
+                    <th>Received</th>
+                    <th>Lines</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="subpanel">
+            <h3>Message Audit</h3>
+            <div class="table-wrap">
+              <table id="audit-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Type</th>
+                    <th>Direction</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section id="products-panel" class="panel active">
         <div class="panel-header">
@@ -259,6 +324,33 @@
             <button type="submit" class="btn btn-primary" id="subcategory-save-btn" disabled>Save</button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="order-detail-modal">
+      <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="order-detail-title">
+        <div class="modal-header">
+          <h3 id="order-detail-title">Order Details</h3>
+        </div>
+        <div class="modal-body" id="order-detail-body"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="force-ship-btn" hidden>Force Ship</button>
+          <button type="button" class="btn btn-secondary" data-close-modal="order-detail-modal">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="message-detail-modal">
+      <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="message-detail-title">
+        <div class="modal-header">
+          <h3 id="message-detail-title">Message Payload</h3>
+        </div>
+        <div class="modal-body">
+          <pre id="message-detail-json" class="json-view"></pre>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="message-detail-modal">Close</button>
+        </div>
       </div>
     </div>
 

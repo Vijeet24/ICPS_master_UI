@@ -1,4 +1,5 @@
 import { api } from "./api.js";
+import { bindWorkflowEvents, initWorkflow, refreshWorkflow } from "./workflow.js";
 import {
   applyFormErrors,
   clearFormErrors,
@@ -33,6 +34,9 @@ const state = {
 function switchTab(tabName) {
   $all(".tab-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tabName));
   $all(".panel").forEach((panel) => panel.classList.toggle("active", panel.id === `${tabName}-panel`));
+  if (tabName === "orders") {
+    refreshWorkflow().catch((error) => showToast(error.message, true));
+  }
 }
 
 function getProductFormValues(form) {
@@ -229,6 +233,10 @@ async function refreshAll() {
   renderBrandsTable();
   renderCategoriesTable();
   renderSubcategoriesTable();
+
+  if ($("#orders-panel").classList.contains("active")) {
+    await refreshWorkflow();
+  }
 }
 
 function resetProductForm() {
@@ -621,8 +629,9 @@ function bindEvents() {
 
 async function init() {
   bindEvents();
+  bindWorkflowEvents();
   try {
-    await refreshAll();
+    await Promise.all([refreshAll(), initWorkflow()]);
   } catch (error) {
     showToast(`Failed to load data: ${error.message}`, true);
   }

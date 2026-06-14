@@ -1,10 +1,10 @@
-# Start ICPS Master UI (PostgreSQL + FastAPI)
+# Start ICPS Master UI (FastAPI)
 Set-Location $PSScriptRoot
 
-if (-not (docker ps -q -f name=icps_postgres)) {
-    Write-Host "Starting PostgreSQL..."
-    docker compose up -d
-    Start-Sleep -Seconds 5
+if (-not (Test-Path ".env")) {
+    Copy-Item ".env.example" ".env"
+    Write-Host "Created .env from .env.example — set DATABASE_URL before first run."
+    Write-Host "Local Postgres (no Docker): .\scripts\setup_local_db.ps1 -PostgresPassword YOUR_PASSWORD"
 }
 
 if (-not (Test-Path ".venv")) {

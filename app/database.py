@@ -20,6 +20,6 @@ def get_db():
 
 
 def init_db():
-    from app import models  # noqa: F401
+    from app import models, order_models  # noqa: F401
 
     Base.metadata.create_all(bind=engine)

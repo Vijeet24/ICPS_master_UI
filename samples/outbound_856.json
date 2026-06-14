@@ -1,0 +1,52 @@
+{
+  "message_id": "MSG-856-SAMPLE-0001",
+  "message_type": "EDI_856_ADVANCE_SHIP_NOTICE",
+  "schema_version": "1.0.0",
+  "created_at": "2026-06-01T10:00:00+00:00",
+  "sender": {
+    "gln": "1514250054321",
+    "name": "ICPS-Lab"
+  },
+  "receiver": {
+    "gln": "1514032003830",
+    "name": "IoT-Lab"
+  },
+  "correlation_id": "356fc292-fa12-4280-814f-664d92e11bcd",
+  "payload": {
+    "transaction": {
+      "type": "856",
+      "control_number": "000000015",
+      "version": "1.0"
+    },
+    "shipment": {
+      "shipment_id": "SHP-SAMPLE0001",
+      "carrier": "FedEx",
+      "tracking_number": "TRK1234567890",
+      "ship_date": "2026-06-01T10:00:00+00:00",
+      "po_number": "PO-20260529-1561",
+      "order_reference": "356fc292-fa12-4280-814f-664d92e11bcd"
+    },
+    "parties": {
+      "buyer": {
+        "gln": "1514032003830"
+      },
+      "seller": {
+        "gln": "1514250054321"
+      },
+      "ship_to": {
+        "gln": "1514032003830"
+      }
+    },
+    "line_items": [
+      {
+        "po_line_number": 1,
+        "item_identification": {
+          "gtin_14": "00012345678936",
+          "description": "Oxygen Sensor"
+        },
+        "quantity_shipped": 1,
+        "unit_of_measure": "EA"
+      }
+    ]
+  }
+}
